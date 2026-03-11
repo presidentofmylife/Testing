@@ -20,59 +20,129 @@
     </div>
   </div>
   <div class="hero-panel" aria-label="هيئة جسم بشري أثناء العلاج الطبيعي">
-    <svg viewBox="0 0 340 420" class="hero-r-visual" role="img" aria-label="جسم إنسان مع عمود فقري">
-      <defs>
-        <linearGradient id="bodyFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#f0f7ff" />
-          <stop offset="1" stop-color="#dcecff" />
-        </linearGradient>
-        <linearGradient id="bodyStroke" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#5d9cff" />
-          <stop offset="1" stop-color="#2766d0" />
-        </linearGradient>
-        <linearGradient id="spineGlow" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#1f6feb" />
-          <stop offset="1" stop-color="#174eaa" />
-        </linearGradient>
-      </defs>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 550" style="background-color: #F2EAE1; font-family: 'Times New Roman', Times, serif;" aria-label="Vintage anatomical atlas of the human muscular system" role="img">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#DCCCAE" stroke-width="0.5" opacity="0.6"/>
+    </pattern>
 
-      <circle cx="170" cy="56" r="26" fill="#edf5ff" stroke="#89b7f2" stroke-width="6" />
+    <g id="left-half">
+      <path d="M 200 180 C 170 180 140 185 135 210 C 135 230 160 245 200 245 Z" fill="#9A3B31" opacity="0.1" />
+      <path d="M 200 245 L 180 245 C 175 260 175 380 200 390 Z" fill="#9A3B31" opacity="0.1" />
+      <path d="M 135 175 C 120 190 115 210 120 230 C 130 220 135 200 140 180 Z" fill="#9A3B31" opacity="0.1" />
+      <path d="M 120 230 C 110 250 105 270 110 290 L 115 295 C 120 280 125 260 125 240 Z" fill="#9A3B31" opacity="0.1" />
+      <path d="M 185 405 C 170 460 150 520 140 550 L 200 550 Z" fill="#9A3B31" opacity="0.05" />
 
-      <path d="M105 150C111 112 133 92 170 92C207 92 229 112 235 150C238 172 237 193 231 213C223 239 216 271 218 302V374H191V307C191 291 183 278 170 278C157 278 149 291 149 307V374H122V302C124 271 117 239 109 213C103 193 102 172 105 150Z"
-        fill="url(#bodyFill)"
-        stroke="url(#bodyStroke)"
-        stroke-width="6"
-        stroke-linejoin="round" />
+      <path d="
+        M 200 80
+        C 180 80 165 90 170 115
+        C 172 125 180 135 185 140
+        C 185 145 185 150 185 155
+        C 165 155 145 158 135 165
+        C 115 165 100 180 95 205
+        C 90 230 95 260 100 280
+        C 95 290 100 330 105 360
+        C 100 390 105 420 115 430
+        C 120 435 125 430 120 410
+        C 115 390 115 370 120 360
+        C 125 330 125 300 130 280
+        C 130 250 135 235 135 235
+        C 135 270 140 310 145 340
+        C 150 370 140 400 130 440
+        C 125 470 125 510 130 550
+        " fill="none" stroke="#362519" stroke-width="1.8" stroke-linecap="round"/>
+      
+      <path d="M 200 450 C 190 470 185 500 180 550" fill="none" stroke="#362519" stroke-width="1.8" />
 
-      <path d="M170 94C162 130 162 165 170 199C177 227 177 252 170 276"
-        fill="none"
-        stroke="url(#spineGlow)"
-        stroke-width="12"
-        stroke-linecap="round" />
+      <path d="M 200 245 C 180 245 165 230 150 215" fill="none" stroke="#685E53" stroke-width="0.8" opacity="0.4" />
+      <path d="M 200 260 C 180 260 160 245 145 230" fill="none" stroke="#685E53" stroke-width="0.8" opacity="0.4" />
+      <path d="M 200 275 C 180 275 155 260 140 245" fill="none" stroke="#685E53" stroke-width="0.8" opacity="0.4" />
+      <path d="M 200 170 C 180 170 160 165 135 175" fill="none" stroke="#362519" stroke-width="1.5" />
 
-      <g fill="#f8fbff" stroke="#2b6fdb" stroke-width="3">
-        <circle cx="170" cy="117" r="7" />
-        <circle cx="170" cy="139" r="7" />
-        <circle cx="170" cy="161" r="7" />
-        <circle cx="170" cy="183" r="7" />
-        <circle cx="170" cy="205" r="7" />
-        <circle cx="170" cy="227" r="7" />
-        <circle cx="170" cy="249" r="7" />
-      </g>
+      <path d="M 200 180 C 170 180 140 185 135 210 C 135 230 160 245 200 245" fill="none" stroke="#9A3B31" stroke-width="1.2" />
+      <path d="M 190 188 C 160 190 145 200 140 210" fill="none" stroke="#9A3B31" stroke-width="0.6" opacity="0.7" />
+      <path d="M 190 196 C 160 198 145 210 142 220" fill="none" stroke="#9A3B31" stroke-width="0.6" opacity="0.7" />
+      <path d="M 190 204 C 165 208 150 220 145 230" fill="none" stroke="#9A3B31" stroke-width="0.6" opacity="0.7" />
+      <path d="M 190 212 C 170 218 155 230 150 240" fill="none" stroke="#9A3B31" stroke-width="0.6" opacity="0.7" />
 
-      <path d="M117 219Q170 184 223 219"
-        fill="none"
-        stroke="#5b97ef"
-        stroke-width="12"
-        stroke-linecap="round"
-        opacity=".78" />
-      <path d="M122 248Q170 214 218 248"
-        fill="none"
-        stroke="#5b97ef"
-        stroke-width="10"
-        stroke-linecap="round"
-        opacity=".72" />
-    </svg>
+      <path d="M 200 245 L 180 245 C 175 260 175 275 200 275" fill="none" stroke="#9A3B31" stroke-width="1.2" />
+      <path d="M 200 280 L 178 280 C 175 295 175 310 200 310" fill="none" stroke="#9A3B31" stroke-width="1.2" />
+      <path d="M 200 315 L 180 315 C 178 330 180 345 200 345" fill="none" stroke="#9A3B31" stroke-width="1.2" />
+      <path d="M 200 350 L 185 350 C 185 370 190 385 200 390" fill="none" stroke="#9A3B31" stroke-width="1.2" />
+      <path d="M 175 245 C 165 280 165 320 180 380" fill="none" stroke="#9A3B31" stroke-width="0.8" opacity="0.8" />
+
+      <path d="M 170 260 C 150 290 145 320 145 350" fill="none" stroke="#9A3B31" stroke-width="1" />
+      <path d="M 170 280 C 155 300 150 330 155 360" fill="none" stroke="#9A3B31" stroke-width="1" />
+      <path d="M 165 280 L 145 270 M 165 300 L 145 290 M 170 320 L 145 310 M 170 340 L 148 330" fill="none" stroke="#9A3B31" stroke-width="0.6" opacity="0.6" />
+
+      <path d="M 135 175 C 120 190 115 210 120 230 C 130 220 135 200 140 180" fill="none" stroke="#9A3B31" stroke-width="1.2" />
+      <path d="M 132 185 C 122 195 120 210 125 225 M 128 180 C 118 195 115 210 120 220" fill="none" stroke="#9A3B31" stroke-width="0.6" opacity="0.6"/>
+
+      <path d="M 120 230 C 110 250 105 270 110 290" fill="none" stroke="#9A3B31" stroke-width="1" />
+      <path d="M 125 240 C 125 260 120 280 115 295" fill="none" stroke="#9A3B31" stroke-width="1" />
+      <path d="M 105 290 C 95 320 100 360 110 380" fill="none" stroke="#9A3B31" stroke-width="1" />
+
+      <path d="M 185 150 L 200 170" fill="none" stroke="#9A3B31" stroke-width="1.2" />
+      <path d="M 185 150 C 175 155 170 160 165 165" fill="none" stroke="#9A3B31" stroke-width="1" />
+
+      <path d="M 145 360 C 160 390 180 405 200 410" fill="none" stroke="#362519" stroke-width="1.5" />
+      <path d="M 185 405 C 170 460 150 520 140 550" fill="none" stroke="#9A3B31" stroke-width="1" />
+      <path d="M 175 410 C 175 460 170 520 160 550" fill="none" stroke="#9A3B31" stroke-width="1" />
+      <path d="M 160 390 C 150 440 140 490 145 550" fill="none" stroke="#9A3B31" stroke-width="1" />
+
+      <path d="M 180 125 C 175 130 175 135 180 140" fill="none" stroke="#362519" stroke-width="0.8" />
+      <path d="M 190 105 C 180 105 175 110 175 115 C 175 120 180 125 190 125" fill="none" stroke="#362519" stroke-width="0.8" />
+      <path d="M 200 110 L 195 125 L 200 130" fill="none" stroke="#362519" stroke-width="0.8" />
+    </g>
+  </defs>
+
+  <rect width="100%" height="100%" fill="url(#grid)" />
+  
+  <rect x="15" y="15" width="370" height="520" fill="none" stroke="#362519" stroke-width="1" />
+  <rect x="20" y="20" width="360" height="510" fill="none" stroke="#362519" stroke-width="2" />
+
+  <path d="M 200 70 L 200 520" fill="none" stroke="#362519" stroke-width="0.5" stroke-dasharray="4 4" opacity="0.3" />
+
+  <path d="M 35 35 L 35 55 M 25 45 L 45 45" fill="none" stroke="#8C7355" stroke-width="1" />
+  <circle cx="35" cy="45" r="8" fill="none" stroke="#8C7355" stroke-width="0.5" />
+
+  <use href="#left-half" />
+  <use href="#left-half" transform="translate(400, 0) scale(-1, 1)" />
+
+  <text x="200" y="45" font-size="14" fill="#362519" text-anchor="middle" font-weight="bold" letter-spacing="3">TABVLA ANATOMICA</text>
+  <text x="200" y="58" font-size="8" fill="#5A4032" text-anchor="middle" font-style="italic" letter-spacing="1">SYSTEMA MUSCULARE HUMANUM</text>
+
+  <path d="M 120 260 L 50 260" fill="none" stroke="#362519" stroke-width="0.5" />
+  <text x="45" y="262" font-size="7" fill="#362519" text-anchor="end" font-style="italic">Biceps brachii</text>
+
+  <path d="M 160 420 L 60 420" fill="none" stroke="#362519" stroke-width="0.5" />
+  <text x="55" y="422" font-size="7" fill="#362519" text-anchor="end" font-style="italic">Crista iliaca</text>
+
+  <path d="M 165 480 L 50 480" fill="none" stroke="#362519" stroke-width="0.5" />
+  <text x="45" y="482" font-size="7" fill="#362519" text-anchor="end" font-style="italic">Rectus femoris</text>
+
+  <path d="M 250 220 L 330 220" fill="none" stroke="#362519" stroke-width="0.5" />
+  <text x="335" y="222" font-size="7" fill="#362519" font-style="italic">Pectoralis major</text>
+
+  <path d="M 220 290 L 340 290" fill="none" stroke="#362519" stroke-width="0.5" />
+  <text x="345" y="292" font-size="7" fill="#362519" font-style="italic">Rectus abdominis</text>
+
+  <path d="M 260 190 L 320 160" fill="none" stroke="#362519" stroke-width="0.5" />
+  <text x="325" y="162" font-size="7" fill="#362519" font-style="italic">Deltoideus</text>
+
+  <path d="M 240 360 L 330 380" fill="none" stroke="#362519" stroke-width="0.5" />
+  <text x="335" y="382" font-size="7" fill="#362519" font-style="italic">Obliquus externus</text>
+
+  <circle cx="65" cy="480" r="28" fill="#F2EAE1" stroke="#362519" stroke-width="1" />
+  <path d="M 45 460 Q 65 480 85 470 M 40 470 Q 65 490 80 480 M 50 480 Q 65 500 85 490" fill="none" stroke="#9A3B31" stroke-width="1.5" />
+  <path d="M 45 460 Q 65 480 85 470 M 40 470 Q 65 490 80 480 M 50 480 Q 65 500 85 490" fill="none" stroke="#362519" stroke-width="0.3" />
+  <text x="65" y="520" font-size="6" fill="#362519" text-anchor="middle" font-style="italic">Fig II. Fibra Muscularis</text>
+
+  <circle cx="335" cy="480" r="28" fill="#F2EAE1" stroke="#362519" stroke-width="1" />
+  <path d="M 335 455 L 335 505 M 320 465 L 350 465 M 325 480 L 345 480 M 325 495 L 345 495" fill="none" stroke="#362519" stroke-width="1.5" opacity="0.8"/>
+  <text x="335" y="520" font-size="6" fill="#362519" text-anchor="middle" font-style="italic">Fig III. Structura Ossea</text>
+
+</svg>
   </div>
 </section>
 
@@ -130,7 +200,7 @@
   </div>
 </section>
 
-<section class="muscle-lab" data-reveal>
+<!-- <section class="muscle-lab" data-reveal>
   <div>
     <h2>مختبر العضلات التفاعلي</h2>
     <p>اختر منطقة من الرسم لتعرف تركيز البرنامج العلاجي عليها.</p>
@@ -206,7 +276,7 @@
       <button type="button" class="zone-btn" data-zone-target="pelvis">الحوض</button>
     </div>
   </div>
-</section>
+</section> -->
 
 <section class="quick-slots" data-reveal>
   <h2>أقرب المواعيد المتاحة</h2>
