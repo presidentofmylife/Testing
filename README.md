@@ -17,21 +17,3 @@ source .venv/bin/activate
 pip install -r requirements.txt
 python app.py
 ```
-
-سيفتح السيرفر على:
-
-- `http://127.0.0.1:5050`
-
-## الحسابات الافتراضية
-
-- مدير:
-  - المستخدم: `admin`
-  - كلمة المرور: `Admin@123`
-- مراجع تجريبي:
-  - المستخدم: `user`
-  - كلمة المرور: `User@123`
-
-## قاعدة البيانات
-
-- SQLite تلقائياً في: `instance/el_raheem.db`
-- يتم إنشاؤها تلقائياً عند أول تشغيل.
