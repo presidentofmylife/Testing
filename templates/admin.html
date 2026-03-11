@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}لوحة الإدارة | الرحيم{% endblock %}
+{% block content %}
+<section class="section-head" data-reveal>
+  <h1>لوحة الإدارة</h1>
+  <p>إدارة مواعيد الحجز والرد على رسائل المراجعين من مكان واحد.</p>
+</section>
+
+<section class="admin-grid" data-reveal>
+  <article class="panel">
+    <h2>إضافة موعد جديد</h2>
+    <form method="post" action="{{ url_for('add_slot') }}" class="grid-form">
+      <label for="start_time">وقت البداية</label>
+      <input id="start_time" name="start_time" type="datetime-local" required />
+
+      <label for="end_time">وقت النهاية</label>
+      <input id="end_time" name="end_time" type="datetime-local" required />
+
+      <label for="capacity">السعة</label>
+      <input id="capacity" name="capacity" type="number" min="1" max="20" value="1" required />
+
+      <button class="btn" type="submit">إضافة الموعد</button>
+    </form>
+  </article>
+
+  <article class="panel">
+    <h2>رسائل بانتظار الرد</h2>
+    {% if pending_messages %}
+      <div class="pending-list">
+        {% for msg in pending_messages %}
+        <div class="pending-item">
+          <p><strong>{{ msg.full_name }}</strong> • {{ msg.created_at|dt_ar }}</p>
+          <p>{{ msg.body }}</p>
+          <form method="post" action="{{ url_for('respond_message', message_id=msg.id) }}">
+            <textarea name="response" rows="2" placeholder="اكتب الرد" required></textarea>
+            <button class="btn" type="submit">رد</button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="empty-state">لا توجد رسائل معلقة.</p>
+    {% endif %}
+  </article>
+</section>
+
+<section class="panel" data-reveal>
+  <h2>المواعيد</h2>
+  {% if slots %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>البداية</th>
+          <th>النهاية</th>
+          <th>السعة</th>
+          <th>المحجوز</th>
+          <th>الحالة</th>
+          <th>إجراء</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for slot in slots %}
+        <tr>
+          <td>{{ slot.start_time|dt_ar }}</td>
+          <td>{{ slot.end_time|dt_ar }}</td>
+          <td>{{ slot.capacity }}</td>
+          <td>{{ slot.booked }}</td>
+          <td>{{ 'فعال' if slot.is_active else 'متوقف' }}</td>
+          <td>
+            <form method="post" action="{{ url_for('toggle_slot', slot_id=slot.id) }}">
+              <button class="btn ghost" type="submit">{{ 'إيقاف' if slot.is_active else 'تفعيل' }}</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <p class="empty-state">لا توجد مواعيد مضافة.</p>
+  {% endif %}
+</section>
+
+<section class="panel" data-reveal>
+  <h2>آخر الحجوزات</h2>
+  {% if recent_reservations %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>المراجع</th>
+          <th>الموعد</th>
+          <th>ملاحظة</th>
+          <th>وقت الحجز</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in recent_reservations %}
+        <tr>
+          <td>{{ item.full_name }}</td>
+          <td>{{ item.start_time|dt_ar }} → {{ item.end_time|dt_ar }}</td>
+          <td>{{ item.notes or '-' }}</td>
+          <td>{{ item.created_at|dt_ar }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="empty-state">لا توجد حجوزات بعد.</p>
+  {% endif %}
+</section>
+{% endblock %}

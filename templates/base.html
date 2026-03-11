@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}مركز الرحيم للعلاج الطبيعي{% endblock %}</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/r-logo.svg') }}" type="image/svg+xml" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <script defer src="{{ url_for('static', filename='js/main.js') }}"></script>
+  </head>
+  <body>
+    <div class="bg-orb bg-orb-a" aria-hidden="true"></div>
+    <div class="bg-orb bg-orb-b" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a href="{{ url_for('home') }}" class="brand">
+          <img src="{{ url_for('static', filename='images/r-logo.svg') }}" alt="شعار الرحيم بشكل جسم إنسان وعمود فقري" class="brand-logo" />
+          <div>
+            <strong>الرحيم</strong>
+            <span>مركز العلاج الطبيعي</span>
+          </div>
+        </a>
+
+        <nav class="site-nav">
+          <a href="{{ url_for('home') }}">الرئيسية</a>
+          {% if current_user.is_authenticated %}
+          <a href="{{ url_for('reservations') }}">الحجوزات</a>
+          <a href="{{ url_for('chat') }}">الدردشة</a>
+          {% if current_user.role == 'admin' %}
+          <a href="{{ url_for('admin_dashboard') }}">لوحة الإدارة</a>
+          {% endif %}
+          {% endif %}
+        </nav>
+
+        <div class="account-zone">
+          {% if current_user.is_authenticated %}
+          <span class="account-pill">
+            {{ current_user.full_name }}
+            <small>{{ 'مدير' if current_user.role == 'admin' else 'مراجع' }}</small>
+          </span>
+          <a class="btn ghost" href="{{ url_for('logout') }}">تسجيل الخروج</a>
+          {% else %}
+          <a class="btn ghost" href="{{ url_for('register') }}">حساب جديد</a>
+          <a class="btn" href="{{ url_for('login') }}">دخول</a>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+
+    <main class="container page-content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+      <section class="flash-stack" aria-live="polite">
+        {% for category, message in messages %}
+        <article class="flash flash-{{ category }}">{{ message }}</article>
+        {% endfor %}
+      </section>
+      {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>الرحيم للعلاج الطبيعي • رعاية عضلية وحركية مبنية على التقييم الدقيق</p>
+      </div>
+    </footer>
+  </body>
+</html>

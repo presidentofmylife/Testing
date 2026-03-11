@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %}الدردشة | الرحيم{% endblock %}
+{% block content %}
+<section class="section-head" data-reveal>
+  <h1>الدردشة العلاجية</h1>
+  {% if current_user.role == 'admin' %}
+  <p>رسائل المراجعين مرتبة بحيث تظهر الرسائل غير المجابة أولاً.</p>
+  {% else %}
+  <p>يمكنك إرسال رسالة واحدة فقط حتى يصلك الرد من الإدارة.</p>
+  {% endif %}
+</section>
+
+{% if current_user.role == 'admin' %}
+<section class="panel" data-reveal>
+  <h2>رسائل المراجعين</h2>
+  {% if messages %}
+  <div class="messages-admin">
+    {% for msg in messages %}
+    <article class="message-admin-card {{ 'pending' if msg.status == 'pending' else 'answered' }}">
+      <header>
+        <strong>{{ msg.full_name }}</strong>
+        <small>@{{ msg.username }} • {{ msg.created_at|dt_ar }}</small>
+      </header>
+      <p class="message-body">{{ msg.body }}</p>
+
+      {% if msg.status == 'pending' %}
+      <form method="post" action="{{ url_for('respond_message', message_id=msg.id) }}">
+        <label for="response-{{ msg.id }}">الرد</label>
+        <textarea id="response-{{ msg.id }}" name="response" rows="2" required></textarea>
+        <button class="btn" type="submit">إرسال الرد</button>
+      </form>
+      {% else %}
+      <div class="answer-box">
+        <h4>رد الإدارة</h4>
+        <p>{{ msg.response }}</p>
+        <small>{{ msg.responded_at|dt_ar }}</small>
+      </div>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="empty-state">لا توجد رسائل حالياً.</p>
+  {% endif %}
+</section>
+{% else %}
+<section class="chat-layout" data-reveal>
+  <article class="panel">
+    <h2>أرسل استفسارك</h2>
+    <form method="post">
+      <label for="message">الرسالة</label>
+      <textarea id="message" name="message" rows="4" {% if has_pending %}disabled{% endif %} placeholder="مثال: أشعر بألم في أسفل الظهر بعد الجلوس الطويل"></textarea>
+      <button class="btn" type="submit" {% if has_pending %}disabled{% endif %}>إرسال</button>
+      {% if has_pending %}
+      <p class="badge-warn">لا يمكنك إرسال رسالة جديدة قبل الرد على رسالتك الحالية.</p>
+      {% endif %}
+    </form>
+  </article>
+
+  <article class="panel">
+    <h2>سجل الرسائل</h2>
+    {% if messages %}
+    <div class="message-thread">
+      {% for msg in messages %}
+      <div class="message-item {{ msg.status }}">
+        <p><strong>رسالتك:</strong> {{ msg.body }}</p>
+        <small>{{ msg.created_at|dt_ar }}</small>
+
+        {% if msg.status == 'answered' %}
+        <div class="reply">
+          <p><strong>رد الإدارة:</strong> {{ msg.response }}</p>
+          <small>{{ msg.responded_at|dt_ar }}</small>
+        </div>
+        {% else %}
+        <p class="badge-warn">بانتظار الرد</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty-state">لا توجد رسائل بعد.</p>
+    {% endif %}
+  </article>
+</section>
+{% endif %}
+{% endblock %}

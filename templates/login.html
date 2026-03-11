@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}تسجيل الدخول | الرحيم{% endblock %}
+{% block content %}
+<section class="auth-shell" data-reveal>
+  <div class="auth-showcase">
+    <img src="{{ url_for('static', filename='images/r-logo.svg') }}" alt="شعار الرحيم بشكل جسم إنسان وعمود فقري" />
+    <h1>بوابة مركز الرحيم</h1>
+    <p>الدخول يمنحك إدارة الحجوزات، متابعة الردود، والوصول للملف الحركي الخاص بك.</p>
+    <ul>
+      <li>جلسات منظمة حسب الحالة</li>
+      <li>رسالة واحدة بانتظار الرد لضمان متابعة دقيقة</li>
+      <li>لوحة إدارة كاملة للمشرف</li>
+    </ul>
+  </div>
+
+  <form class="auth-form" method="post">
+    <h2>تسجيل الدخول</h2>
+    <label for="username">اسم المستخدم</label>
+    <input id="username" name="username" type="text" required />
+
+    <label for="password">كلمة المرور</label>
+    <input id="password" name="password" type="password" required />
+
+    <button class="btn" type="submit">دخول</button>
+
+    <p>لا يوجد حساب؟ <a href="{{ url_for('register') }}">أنشئ حساباً جديداً</a></p>
+  </form>
+</section>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}الحجوزات | الرحيم{% endblock %}
+{% block content %}
+<section class="section-head" data-reveal>
+  <h1>الحجوزات</h1>
+  <p>اختر الموعد المناسب لك. عند اكتمال السعة لن يظهر خيار الحجز.</p>
+</section>
+
+<section class="slots-grid" data-reveal>
+  {% if slots %}
+    {% for slot in slots %}
+      {% set remaining = slot.capacity - slot.booked %}
+      {% set usage = ((slot.booked / slot.capacity) * 100) | int %}
+      <article class="slot-card">
+        <h2>{{ slot.start_time|dt_ar }}</h2>
+        <p>النهاية: {{ slot.end_time|dt_ar }}</p>
+        <div class="capacity">
+          <div class="bar"><span style="width: {{ usage }}%"></span></div>
+          <small>المتبقي {{ remaining }} / {{ slot.capacity }}</small>
+        </div>
+
+        {% if remaining > 0 %}
+          <form method="post" action="{{ url_for('book_slot', slot_id=slot.id) }}">
+            <label for="notes-{{ slot.id }}">ملاحظة للحجز (اختياري)</label>
+            <textarea id="notes-{{ slot.id }}" name="notes" rows="2" placeholder="مثال: ألم مزمن أسفل الظهر"></textarea>
+            <button class="btn" type="submit">تأكيد الحجز</button>
+          </form>
+        {% else %}
+          <p class="badge-danger">الموعد مكتمل</p>
+        {% endif %}
+      </article>
+    {% endfor %}
+  {% else %}
+    <p class="empty-state">لا توجد مواعيد متاحة الآن.</p>
+  {% endif %}
+</section>
+
+<section class="panel" data-reveal>
+  <h2>حجوزاتي</h2>
+  {% if my_reservations %}
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>موعد البداية</th>
+          <th>موعد النهاية</th>
+          <th>الحالة</th>
+          <th>ملاحظة</th>
+          <th>إجراء</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for booking in my_reservations %}
+        <tr>
+          <td>{{ booking.start_time|dt_ar }}</td>
+          <td>{{ booking.end_time|dt_ar }}</td>
+          <td>{{ booking.status }}</td>
+          <td>{{ booking.notes or '-' }}</td>
+          <td>
+            <form method="post" action="{{ url_for('cancel_reservation', reservation_id=booking.id) }}">
+              <button class="btn ghost danger" type="submit">إلغاء</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <p class="empty-state">لا توجد حجوزات حالية.</p>
+  {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,69 @@
+<svg width="240" height="240" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">شعار مركز الرحيم للعلاج الطبيعي</title>
+  <desc id="desc">هيئة تشريحية واقعية للجزء العلوي من جسم الإنسان مع عمود فقري</desc>
+  <defs>
+    <radialGradient id="halo" cx="50%" cy="34%" r="72%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#d6e8ff" />
+    </radialGradient>
+    <linearGradient id="badgeFill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f8fbff" />
+      <stop offset="100%" stop-color="#dcecff" />
+    </linearGradient>
+    <linearGradient id="torsoFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#eef6ff" />
+      <stop offset="100%" stop-color="#d2e5fc" />
+    </linearGradient>
+    <linearGradient id="muscleFill" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7baef8" />
+      <stop offset="100%" stop-color="#3d7fdf" />
+    </linearGradient>
+    <linearGradient id="spineStroke" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1f6feb" />
+      <stop offset="100%" stop-color="#194f9e" />
+    </linearGradient>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#1d4a8b" flood-opacity="0.18" />
+    </filter>
+  </defs>
+
+  <rect x="14" y="14" width="212" height="212" rx="56" fill="url(#badgeFill)" stroke="#b7d2f2" stroke-width="4" />
+  <circle cx="120" cy="120" r="84" fill="url(#halo)" />
+
+  <g filter="url(#softShadow)">
+    <circle cx="120" cy="53" r="17" fill="#f2f8ff" stroke="#5f8fcd" stroke-width="4" />
+    <path d="M103 73Q120 66 137 73" fill="none" stroke="#7da5da" stroke-width="4" stroke-linecap="round" />
+
+    <path d="M90 96C92 79 106 67 120 67C134 67 148 79 150 96L157 123C163 139 163 159 156 175L149 192C146 200 145 209 145 218V223C145 232 136 239 120 239C104 239 95 232 95 223V218C95 209 94 200 91 192L84 175C77 159 77 139 83 123Z"
+      fill="url(#torsoFill)"
+      stroke="#3867a5"
+      stroke-width="2.6"
+      stroke-linejoin="round" />
+
+    <path d="M97 109C103 98 113 95 120 103C121 118 118 131 111 141C101 139 95 126 97 109Z" fill="url(#muscleFill)" opacity="0.86" />
+    <path d="M143 109C137 98 127 95 120 103C119 118 122 131 129 141C139 139 145 126 143 109Z" fill="url(#muscleFill)" opacity="0.86" />
+
+    <path d="M113 139C117 133 123 133 127 139C130 158 130 178 126 197C122 202 118 202 114 197C110 178 110 158 113 139Z"
+      fill="url(#muscleFill)"
+      opacity="0.9" />
+    <path d="M102 147C108 143 114 145 117 152C117 169 115 183 110 195C102 196 96 190 94 180C94 166 97 154 102 147Z" fill="url(#muscleFill)" opacity="0.72" />
+    <path d="M138 147C132 143 126 145 123 152C123 169 125 183 130 195C138 196 144 190 146 180C146 166 143 154 138 147Z" fill="url(#muscleFill)" opacity="0.72" />
+
+    <path d="M120 96C114 123 114 151 120 176C124 195 124 209 120 223" fill="none" stroke="url(#spineStroke)" stroke-width="5" stroke-linecap="round" />
+
+    <g fill="#f8fcff" stroke="#2e70d4" stroke-width="1.5">
+      <circle cx="120" cy="108" r="3" />
+      <circle cx="120" cy="121" r="3" />
+      <circle cx="120" cy="134" r="3" />
+      <circle cx="120" cy="147" r="3" />
+      <circle cx="120" cy="160" r="3" />
+      <circle cx="120" cy="173" r="3" />
+      <circle cx="120" cy="186" r="3" />
+      <circle cx="120" cy="199" r="3" />
+      <circle cx="120" cy="212" r="3" />
+    </g>
+
+    <path d="M71 136C63 158 64 183 75 202" fill="none" stroke="#6ea6ef" stroke-width="6" stroke-linecap="round" />
+    <path d="M169 136C177 158 176 183 165 202" fill="none" stroke="#6ea6ef" stroke-width="6" stroke-linecap="round" />
+  </g>
+</svg>

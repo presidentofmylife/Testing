@@ -1,0 +1,227 @@
+{% extends "base.html" %}
+{% block title %}الرحيم | العلاج الطبيعي{% endblock %}
+{% block content %}
+<section class="hero" data-reveal>
+  <div class="hero-copy">
+    <p class="eyebrow">مساحة علاجية حركية</p>
+    <h1>نُعيد توازن الحركة بخطة دقيقة لكل فقرة وكل عضلة</h1>
+    <p>
+      في مركز <strong>الرحيم</strong> نعمل على تأهيل العمود الفقري والعضلات العميقة عبر جلسات تفاعلية،
+      تقييم عملي، ومتابعة مستمرة لحالتك.
+    </p>
+    <div class="hero-actions">
+      {% if current_user.is_authenticated %}
+      <a class="btn" href="{{ url_for('reservations') }}">احجز جلسة الآن</a>
+      <a class="btn ghost" href="{{ url_for('chat') }}">اسأل الأخصائي</a>
+      {% else %}
+      <a class="btn" href="{{ url_for('register') }}">ابدأ بحساب جديد</a>
+      <a class="btn ghost" href="{{ url_for('login') }}">لديك حساب؟</a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="hero-panel" aria-label="هيئة جسم بشري أثناء العلاج الطبيعي">
+    <svg viewBox="0 0 340 420" class="hero-r-visual" role="img" aria-label="جسم إنسان مع عمود فقري">
+      <defs>
+        <linearGradient id="bodyFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#f0f7ff" />
+          <stop offset="1" stop-color="#dcecff" />
+        </linearGradient>
+        <linearGradient id="bodyStroke" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#5d9cff" />
+          <stop offset="1" stop-color="#2766d0" />
+        </linearGradient>
+        <linearGradient id="spineGlow" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#1f6feb" />
+          <stop offset="1" stop-color="#174eaa" />
+        </linearGradient>
+      </defs>
+
+      <circle cx="170" cy="56" r="26" fill="#edf5ff" stroke="#89b7f2" stroke-width="6" />
+
+      <path d="M105 150C111 112 133 92 170 92C207 92 229 112 235 150C238 172 237 193 231 213C223 239 216 271 218 302V374H191V307C191 291 183 278 170 278C157 278 149 291 149 307V374H122V302C124 271 117 239 109 213C103 193 102 172 105 150Z"
+        fill="url(#bodyFill)"
+        stroke="url(#bodyStroke)"
+        stroke-width="6"
+        stroke-linejoin="round" />
+
+      <path d="M170 94C162 130 162 165 170 199C177 227 177 252 170 276"
+        fill="none"
+        stroke="url(#spineGlow)"
+        stroke-width="12"
+        stroke-linecap="round" />
+
+      <g fill="#f8fbff" stroke="#2b6fdb" stroke-width="3">
+        <circle cx="170" cy="117" r="7" />
+        <circle cx="170" cy="139" r="7" />
+        <circle cx="170" cy="161" r="7" />
+        <circle cx="170" cy="183" r="7" />
+        <circle cx="170" cy="205" r="7" />
+        <circle cx="170" cy="227" r="7" />
+        <circle cx="170" cy="249" r="7" />
+      </g>
+
+      <path d="M117 219Q170 184 223 219"
+        fill="none"
+        stroke="#5b97ef"
+        stroke-width="12"
+        stroke-linecap="round"
+        opacity=".78" />
+      <path d="M122 248Q170 214 218 248"
+        fill="none"
+        stroke="#5b97ef"
+        stroke-width="10"
+        stroke-linecap="round"
+        opacity=".72" />
+    </svg>
+  </div>
+</section>
+
+<section class="stats-grid" data-reveal>
+  <article class="metric-card">
+    <h3>المراجعين المسجلين</h3>
+    <strong>{{ totals.patients_count }}</strong>
+  </article>
+  <article class="metric-card">
+    <h3>مواعيد فعالة</h3>
+    <strong>{{ totals.active_slots }}</strong>
+  </article>
+  <article class="metric-card">
+    <h3>حجوزات مؤكدة</h3>
+    <strong>{{ totals.reservations_count }}</strong>
+  </article>
+</section>
+
+<section class="flow" data-reveal>
+  <h2>تسلسل الجلسة في الرحيم</h2>
+  <div class="flow-steps">
+    <article>
+      <span>1</span>
+      <h3>تشخيص حركي</h3>
+      <p>تقييم نطاق الحركة، الألم الموضعي، ونمط التعويض العضلي.</p>
+    </article>
+    <article>
+      <span>2</span>
+      <h3>بناء الخطة</h3>
+      <p>برنامج مخصص يشمل تحرير أنسجة، تمارين تثبيت، وإعادة تعليم حركي.</p>
+    </article>
+    <article>
+      <span>3</span>
+      <h3>متابعة تقدّم</h3>
+      <p>قياس أسبوعي للتقدم وتعديل البرنامج حسب الاستجابة الوظيفية.</p>
+    </article>
+  </div>
+</section>
+
+<section class="services" data-reveal>
+  <h2>محاور العلاج</h2>
+  <div class="services-grid">
+    <article>
+      <h3>تأهيل العمود الفقري</h3>
+      <p>برامج متدرجة لآلام الرقبة، الظهر، والانزلاق البسيط مع تركيز على الثبات.</p>
+    </article>
+    <article>
+      <h3>علاج عضلي رياضي</h3>
+      <p>تقنيات لتحرير العضلات المتشنجة وتحسين الأداء بعد الإصابات الرياضية.</p>
+    </article>
+    <article>
+      <h3>إعادة اتزان الحركة</h3>
+      <p>جلسات تصحيح للوقفة ونمط المشي مع تدريب عصبي عضلي عملي.</p>
+    </article>
+  </div>
+</section>
+
+<section class="muscle-lab" data-reveal>
+  <div>
+    <h2>مختبر العضلات التفاعلي</h2>
+    <p>اختر منطقة من الرسم لتعرف تركيز البرنامج العلاجي عليها.</p>
+    <div class="zone-output" id="zone-output">
+      <h3 id="zone-title">المنطقة القطنية</h3>
+      <p id="zone-text">نركز فيها على تحرير الشد مع تدريبات دعم الجذع لمنع تكرار الألم.</p>
+    </div>
+  </div>
+
+  <div class="muscle-map-wrap">
+    <svg id="muscle-map" viewBox="0 0 260 360" role="img" aria-label="مجسم عضلي تفاعلي للجسم البشري">
+      <defs>
+        <linearGradient id="mmBodyFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#f2f8ff" />
+          <stop offset="100%" stop-color="#dcecff" />
+        </linearGradient>
+        <linearGradient id="mmArmFill" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#e8f2ff" />
+          <stop offset="100%" stop-color="#d0e3fb" />
+        </linearGradient>
+      </defs>
+
+      <circle cx="130" cy="38" r="20" fill="#edf5ff" stroke="#6b97d1" stroke-width="3" />
+      <path d="M94 89C97 72 110 62 130 62C150 62 163 72 166 89L175 132C179 149 179 169 172 188L166 208V292C166 318 151 338 130 338C109 338 94 318 94 292V208L88 188C81 169 81 149 85 132Z"
+        fill="url(#mmBodyFill)"
+        stroke="#3e6da9"
+        stroke-width="2.5"
+        stroke-linejoin="round" />
+
+      <path d="M85 132C71 145 66 165 69 188C72 207 84 218 95 214L91 194C86 176 84 152 85 132Z"
+        fill="url(#mmArmFill)"
+        stroke="#7a9fcc"
+        stroke-width="1.8" />
+      <path d="M175 132C189 145 194 165 191 188C188 207 176 218 165 214L169 194C174 176 176 152 175 132Z"
+        fill="url(#mmArmFill)"
+        stroke="#7a9fcc"
+        stroke-width="1.8" />
+
+      <path d="M106 97Q130 84 154 97" fill="none" stroke="#8cb5e4" stroke-width="2.4" stroke-linecap="round" />
+      <path d="M130 93C124 122 124 149 130 175C134 195 134 222 130 249" fill="none" stroke="#5a8ecf" stroke-width="2.4" stroke-linecap="round" />
+
+      <g fill="#f8fcff" stroke="#4c7fbe" stroke-width="1.4">
+        <circle cx="130" cy="108" r="3.4" />
+        <circle cx="130" cy="122" r="3.4" />
+        <circle cx="130" cy="136" r="3.4" />
+        <circle cx="130" cy="150" r="3.4" />
+        <circle cx="130" cy="164" r="3.4" />
+        <circle cx="130" cy="178" r="3.4" />
+        <circle cx="130" cy="192" r="3.4" />
+        <circle cx="130" cy="206" r="3.4" />
+        <circle cx="130" cy="220" r="3.4" />
+      </g>
+
+      <path class="muscle-zone" data-zone="neck" d="M108 64C116 57 144 57 152 64L155 87C145 95 115 95 105 87Z" />
+
+      <path class="muscle-zone" data-zone="upper" d="M92 103C100 92 113 92 121 102C123 121 121 139 114 154C103 154 93 144 89 129Z" />
+      <path class="muscle-zone" data-zone="upper" d="M168 103C160 92 147 92 139 102C137 121 139 139 146 154C157 154 167 144 171 129Z" />
+
+      <path class="muscle-zone active" data-zone="lumbar" d="M98 193C107 186 117 187 123 196C123 218 121 238 114 254C104 256 95 248 92 233C91 216 93 202 98 193Z" />
+      <path class="muscle-zone active" data-zone="lumbar" d="M162 193C153 186 143 187 137 196C137 218 139 238 146 254C156 256 165 248 168 233C169 216 167 202 162 193Z" />
+
+      <path class="muscle-zone" data-zone="core" d="M118 160C124 154 136 154 142 160C147 181 147 213 141 243C134 249 126 249 119 243C113 213 113 181 118 160Z" />
+
+      <path class="muscle-zone" data-zone="pelvis" d="M102 260C110 253 121 253 128 262C128 282 125 302 118 317C107 319 98 310 96 296C95 282 97 268 102 260Z" />
+      <path class="muscle-zone" data-zone="pelvis" d="M158 260C150 253 139 253 132 262C132 282 135 302 142 317C153 319 162 310 164 296C165 282 163 268 158 260Z" />
+    </svg>
+
+    <div class="zone-keys">
+      <button type="button" class="zone-btn" data-zone-target="neck">الرقبة</button>
+      <button type="button" class="zone-btn" data-zone-target="upper">أعلى الظهر</button>
+      <button type="button" class="zone-btn active" data-zone-target="lumbar">أسفل الظهر</button>
+      <button type="button" class="zone-btn" data-zone-target="core">الجذع</button>
+      <button type="button" class="zone-btn" data-zone-target="pelvis">الحوض</button>
+    </div>
+  </div>
+</section>
+
+<section class="quick-slots" data-reveal>
+  <h2>أقرب المواعيد المتاحة</h2>
+  <div class="slots-grid compact">
+    {% if upcoming_slots %}
+      {% for slot in upcoming_slots %}
+      <article class="slot-card">
+        <h3>{{ slot.start_time|dt_ar }}</h3>
+        <p>حتى {{ slot.end_time|dt_ar }}</p>
+        <p>المتبقي: {{ slot.capacity - slot.booked }} من {{ slot.capacity }}</p>
+      </article>
+      {% endfor %}
+    {% else %}
+      <p class="empty-state">لا توجد مواعيد قريبة حالياً. أضف مواعيد من لوحة الإدارة.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
