@@ -1,19 +1,1 @@
-# el-Raheem (Flask)
 
-موقع عربي لمركز العلاج الطبيعي **الرحيم** مع:
-
-- تصميم عضلي تفاعلي + شعار SVG للعمود الفقري.
-- نظام دخول مع صلاحيات (`patient`, `admin`).
-- صفحة حجوزات مع مواعيد قابلة للإدارة.
-- صفحة دردشة: المراجع يرسل **رسالة واحدة فقط** حتى يتم الرد.
-- لوحة إدارة للرد على الرسائل وإضافة/تفعيل/إيقاف مواعيد الحجز.
-
-## التشغيل
-
-```bash
-cd /home/omar/sandbox/Masters/BreatheMap/el-Raheem
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-python app.py
-```
