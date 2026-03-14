@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="goldGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE47A" />
+      <stop offset="50%" stop-color="#D49A2A" />
+      <stop offset="100%" stop-color="#8C5C0A" />
+    </linearGradient>
+
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <g filter="url(#glow)">
+    
+    <path d="M 40 160 L 90 160 M 20 230 L 110 230 M 50 300 L 120 300" 
+          fill="none" 
+          stroke="url(#goldGlow)" 
+          stroke-width="8" 
+          stroke-linecap="round" 
+          opacity="0.5" />
+
+    <circle cx="195" cy="85" r="20" fill="url(#goldGlow)" />
+
+    <path d="M 110 330 
+             C 130 260, 160 190, 180 130 
+             C 230 120, 280 140, 280 180 
+             C 280 230, 220 240, 160 210" 
+          fill="none" 
+          stroke="url(#goldGlow)" 
+          stroke-width="32" 
+          stroke-linecap="round" 
+          stroke-linejoin="round" />
+
+    <path d="M 190 225 
+             C 210 270, 240 300, 275 330" 
+          fill="none" 
+          stroke="url(#goldGlow)" 
+          stroke-width="32" 
+          stroke-linecap="round" />
+
+    <path d="M 310 80 
+             Q 310 110, 340 110 
+             Q 310 110, 310 140 
+             Q 310 110, 280 110 
+             Q 310 110, 310 80 Z" 
+          fill="url(#goldGlow)" />
+
+  </g>
+</svg>
