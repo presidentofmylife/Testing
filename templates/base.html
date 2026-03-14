@@ -36,13 +36,13 @@
         <div class="account-zone">
           {% if current_user.is_authenticated %}
           <span class="account-pill">
-            {{ current_user.full_name }}
+            <span class="account-name">{{ current_user.full_name }}</span>
             <small>{{ 'مدير' if current_user.role == 'admin' else 'مراجع' }}</small>
           </span>
           <a class="btn ghost" href="{{ url_for('logout') }}">تسجيل الخروج</a>
           {% else %}
-          <a class="btn ghost" href="{{ url_for('register') }}">إنشاء حساب Google</a>
-          <a class="btn" href="{{ url_for('login') }}">دخول Google</a>
+          <a class="btn ghost" href="{{ url_for('register') }}">إنشاء حساب</a>
+          <a class="btn" href="{{ url_for('login') }}">تسجيل الدخول</a>
           {% endif %}
         </div>
       </div>

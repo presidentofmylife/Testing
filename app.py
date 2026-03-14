@@ -37,14 +37,31 @@ def utc_now(timespec: str = "seconds") -> str:
     return datetime.utcnow().isoformat(timespec=timespec)
 
 
+def get_database_url() -> str:
+    candidates = [
+        os.environ.get("DATABASE_URL", "").strip(),
+        os.environ.get("POSTGRES_URL", "").strip(),
+        os.environ.get("POSTGRES_URL_NON_POOLING", "").strip(),
+    ]
+
+    for candidate in candidates:
+        if candidate:
+            if candidate.startswith("postgres://"):
+                return candidate.replace("postgres://", "postgresql://", 1)
+            return candidate
+
+    return ""
+
+
 def build_database_uri() -> str:
-    database_url = os.environ.get("DATABASE_URL", "").strip()
+    database_url = get_database_url()
     if not database_url:
+        if os.environ.get("VERCEL"):
+            raise RuntimeError(
+                "No database connection configured. Set DATABASE_URL or POSTGRES_URL on Vercel."
+            )
         os.makedirs(INSTANCE_DIR, exist_ok=True)
         return f"sqlite:///{SQLITE_DB_PATH}"
-
-    if database_url.startswith("postgres://"):
-        database_url = database_url.replace("postgres://", "postgresql://", 1)
     return database_url
 
 

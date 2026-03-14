@@ -129,6 +129,8 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
 .account-pill {
@@ -139,7 +141,19 @@ body {
   font-size: 0.8rem;
   display: inline-flex;
   flex-direction: column;
+  align-items: flex-start;
   line-height: 1.25;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.account-name {
+  display: block;
+  max-inline-size: 18ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
 }
 
 .account-pill small {
@@ -315,43 +329,6 @@ body {
     linear-gradient(160deg, #f8fbff 0%, #eef5ff 42%, #edf4fb 100%);
 }
 
-.hero-panel-head p {
-  margin: 0 0 0.3rem;
-  text-transform: uppercase;
-  letter-spacing: 0.18em;
-  font-size: 0.7rem;
-  color: #50739a;
-}
-
-.hero-panel-head h2 {
-  margin: 0;
-  font-size: 1.18rem;
-  line-height: 1.55;
-}
-
-.hero-visual-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 176px;
-  gap: 0.9rem;
-  align-items: stretch;
-}
-
-.atlas-card {
-  min-height: 100%;
-  padding: 0.75rem;
-  border-radius: 22px;
-  border: 1px solid #d5c3af;
-  background: linear-gradient(180deg, #f3ebdf, #ecdfce);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-
-.atlas-card svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  border-radius: 18px;
-}
-
 .hero-side-image {
   margin: 0;
   display: grid;
@@ -375,6 +352,10 @@ body {
   font-size: 0.78rem;
   line-height: 1.8;
   color: #446381;
+}
+
+.hero-side-image-wide img {
+  min-height: 560px;
 }
 
 .hero-foot {
@@ -1100,6 +1081,15 @@ th {
 }
 
 @media (max-width: 1000px) {
+  .nav-wrap {
+    flex-wrap: wrap;
+  }
+
+  .brand {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
   .hero,
   .muscle-lab,
   .auth-shell,
@@ -1109,8 +1099,7 @@ th {
   }
 
   .hero-notes,
-  .carousel-details,
-  .hero-visual-grid {
+  .carousel-details {
     grid-template-columns: 1fr;
   }
 
@@ -1131,17 +1120,59 @@ th {
   }
 
   .site-nav {
+    display: inline-flex;
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 0.2rem;
+    scrollbar-width: none;
+  }
+
+  .site-nav::-webkit-scrollbar {
     display: none;
+  }
+
+  .site-nav a {
+    white-space: nowrap;
+  }
+
+  .account-zone {
+    justify-content: flex-start;
+    margin-inline-start: auto;
   }
 }
 
 @media (max-width: 680px) {
   .account-zone {
     gap: 0.35rem;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .brand {
+    width: 100%;
+  }
+
+  .site-nav {
+    gap: 0.45rem;
+  }
+
+  .site-nav a {
+    padding: 0.45rem 0.6rem;
+    font-size: 0.84rem;
   }
 
   .account-pill {
-    display: none;
+    flex: 1 1 auto;
+    padding: 0.35rem 0.75rem;
+  }
+
+  .account-name {
+    max-inline-size: 100%;
+  }
+
+  .account-zone .btn {
+    flex: 0 0 auto;
   }
 
   .hero-copy,
