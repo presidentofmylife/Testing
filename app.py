@@ -3,7 +3,7 @@ import os
 import secrets
 from datetime import datetime
 from functools import lru_cache, wraps
-from urllib.parse import urljoin, urlparse
+from urllib.parse import parse_qs, urljoin, urlparse
 
 import requests
 from flask import Flask, flash, redirect, render_template, request, session, url_for
@@ -25,6 +25,10 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 INSTANCE_DIR = os.path.join(BASE_DIR, "instance")
 SQLITE_DB_PATH = os.path.join(INSTANCE_DIR, "el_raheem.db")
 GOOGLE_DISCOVERY_URL = "https://accounts.google.com/.well-known/openid-configuration"
+DEFAULT_ADMIN_EMAILS = {
+    "ma1355661@gmail.com",
+    "omar.sendiony@gmail.com",
+}
 
 load_dotenv(os.path.join(BASE_DIR, ".env"))
 
@@ -135,6 +139,19 @@ messages_table = db.Table(
     db.Column("responded_by", db.Integer, db.ForeignKey("users.id")),
 )
 
+youtube_videos_table = db.Table(
+    "youtube_videos",
+    db.metadata,
+    db.Column("id", db.Integer, primary_key=True),
+    db.Column("title", db.String(255), nullable=False),
+    db.Column("url", db.Text, nullable=False),
+    db.Column("embed_url", db.Text, nullable=False),
+    db.Column("display_order", db.Integer, nullable=False, server_default="0"),
+    db.Column("created_by", db.Integer, db.ForeignKey("users.id")),
+    db.Column("created_at", db.String(32), nullable=False),
+    db.Column("updated_at", db.String(32), nullable=False),
+)
+
 
 class User(UserMixin):
     def __init__(
@@ -236,6 +253,7 @@ def ensure_user_columns() -> None:
 def init_db() -> None:
     db.create_all()
     ensure_user_columns()
+    ensure_admin_users()
 
 
 @lru_cache(maxsize=1)
@@ -248,7 +266,63 @@ def get_google_provider_cfg():
 @lru_cache(maxsize=1)
 def get_admin_emails() -> set[str]:
     raw_value = os.environ.get("EL_RAHEEM_ADMIN_EMAILS", "")
-    return {email.strip().lower() for email in raw_value.split(",") if email.strip()}
+    configured_emails = {email.strip().lower() for email in raw_value.split(",") if email.strip()}
+    return DEFAULT_ADMIN_EMAILS | configured_emails
+
+
+def ensure_admin_users() -> None:
+    inspector = inspect(db.engine)
+    if not inspector.has_table("users"):
+        return
+
+    with db.engine.begin() as connection:
+        for email in get_admin_emails():
+            connection.execute(
+                text("UPDATE users SET role = 'admin' WHERE LOWER(email) = :email"),
+                {"email": email},
+            )
+
+
+def extract_youtube_video_id(video_url: str) -> str | None:
+    raw_value = video_url.strip()
+    if not raw_value:
+        return None
+
+    if all(character.isalnum() or character in {"-", "_"} for character in raw_value) and len(raw_value) >= 11:
+        return raw_value
+
+    parsed = urlparse(raw_value)
+    host = parsed.netloc.lower()
+    path = parsed.path.strip("/")
+    candidate = ""
+
+    if host in {"youtu.be", "www.youtu.be"}:
+        candidate = path.split("/", 1)[0]
+    elif host.endswith("youtube.com"):
+        if path == "watch":
+            candidate = parse_qs(parsed.query).get("v", [""])[0]
+        elif path.startswith("embed/"):
+            candidate = path.split("/", 1)[1]
+        elif path.startswith("shorts/"):
+            candidate = path.split("/", 1)[1]
+        elif path.startswith("live/"):
+            candidate = path.split("/", 1)[1]
+
+    candidate = candidate.split("/", 1)[0].strip()
+    if not candidate:
+        return None
+
+    if not all(character.isalnum() or character in {"-", "_"} for character in candidate):
+        return None
+
+    return candidate
+
+
+def build_youtube_embed_url(video_url: str) -> str | None:
+    video_id = extract_youtube_video_id(video_url)
+    if not video_id:
+        return None
+    return f"https://www.youtube-nocookie.com/embed/{video_id}?rel=0"
 
 
 def get_google_oauth_config() -> tuple[str, str]:
@@ -426,21 +500,22 @@ def home():
         )
     )
 
-    totals_row = fetch_one(
-        """
-        SELECT
-            (SELECT COUNT(*) FROM users WHERE role = 'patient') AS patients_count,
-            (SELECT COUNT(*) FROM reservation_slots WHERE is_active = 1) AS active_slots,
-            (SELECT COUNT(*) FROM reservations WHERE status = 'confirmed') AS reservations_count
-        """
+    showcase_videos = rows_to_dicts(
+        fetch_all(
+            """
+            SELECT id, title, url, embed_url, display_order
+            FROM youtube_videos
+            ORDER BY display_order ASC, updated_at DESC
+            LIMIT 8
+            """
+        )
     )
-    totals = dict(totals_row) if totals_row else {
-        "patients_count": 0,
-        "active_slots": 0,
-        "reservations_count": 0,
-    }
 
-    return render_template("home.html", upcoming_slots=upcoming_slots, totals=totals)
+    return render_template(
+        "home.html",
+        upcoming_slots=upcoming_slots,
+        showcase_videos=showcase_videos,
+    )
 
 
 @app.route("/login")
@@ -696,13 +771,14 @@ def cancel_reservation(reservation_id: int):
 
 
 @app.route("/chat", methods=["GET", "POST"])
+@app.route("/support", methods=["GET", "POST"])
 @login_required
-def chat():
+def support():
     if request.method == "POST" and current_user.role != "admin":
         body = request.form.get("message", "").strip()
         if len(body) < 5:
             flash("الرسالة قصيرة جداً.", "error")
-            return redirect(url_for("chat"))
+            return redirect(url_for("support"))
 
         pending = fetch_one(
             "SELECT id FROM messages WHERE user_id = :user_id AND status = 'pending'",
@@ -710,7 +786,7 @@ def chat():
         )
         if pending:
             flash("لديك رسالة قيد الانتظار. انتظر الرد قبل إرسال رسالة جديدة.", "error")
-            return redirect(url_for("chat"))
+            return redirect(url_for("support"))
 
         execute_sql(
             """
@@ -723,7 +799,7 @@ def chat():
         )
         db.session.commit()
         flash("تم إرسال الرسالة إلى إدارة المركز.", "success")
-        return redirect(url_for("chat"))
+        return redirect(url_for("support"))
 
     if current_user.role == "admin":
         messages = rows_to_dicts(
@@ -746,7 +822,7 @@ def chat():
                 """
             )
         )
-        return render_template("chat.html", messages=messages, has_pending=False)
+        return render_template("support.html", messages=messages, has_pending=False)
 
     messages = rows_to_dicts(
         fetch_all(
@@ -760,7 +836,7 @@ def chat():
         )
     )
     has_pending = any(message["status"] == "pending" for message in messages)
-    return render_template("chat.html", messages=messages, has_pending=has_pending)
+    return render_template("support.html", messages=messages, has_pending=has_pending)
 
 
 @app.route("/admin/messages/respond/<int:message_id>", methods=["POST"])
@@ -861,11 +937,22 @@ def admin_dashboard():
         )
     )
 
+    youtube_videos = rows_to_dicts(
+        fetch_all(
+            """
+            SELECT id, title, url, embed_url, display_order, created_at, updated_at
+            FROM youtube_videos
+            ORDER BY display_order ASC, updated_at DESC
+            """
+        )
+    )
+
     return render_template(
         "admin.html",
         slots=slots,
         pending_messages=pending_messages,
         recent_reservations=recent_reservations,
+        youtube_videos=youtube_videos,
     )
 
 
@@ -919,6 +1006,126 @@ def add_slot():
     )
     db.session.commit()
     flash("تمت إضافة الموعد بنجاح.", "success")
+    return redirect(url_for("admin_dashboard"))
+
+
+@app.route("/admin/videos/add", methods=["POST"])
+@admin_required
+def add_youtube_video():
+    title = request.form.get("title", "").strip()
+    video_url = request.form.get("video_url", "").strip()
+    display_order = request.form.get("display_order", "0").strip()
+
+    try:
+        display_order_num = int(display_order or "0")
+    except ValueError:
+        flash("ترتيب الفيديو غير صالح.", "error")
+        return redirect(url_for("admin_dashboard"))
+
+    if len(title) < 2:
+        flash("عنوان الفيديو قصير جداً.", "error")
+        return redirect(url_for("admin_dashboard"))
+
+    embed_url = build_youtube_embed_url(video_url)
+    if not embed_url:
+        flash("رابط يوتيوب غير صالح.", "error")
+        return redirect(url_for("admin_dashboard"))
+
+    now = utc_now()
+    execute_sql(
+        """
+        INSERT INTO youtube_videos (
+            title,
+            url,
+            embed_url,
+            display_order,
+            created_by,
+            created_at,
+            updated_at
+        )
+        VALUES (
+            :title,
+            :url,
+            :embed_url,
+            :display_order,
+            :created_by,
+            :created_at,
+            :updated_at
+        )
+        """,
+        title=title,
+        url=video_url,
+        embed_url=embed_url,
+        display_order=display_order_num,
+        created_by=current_user.id,
+        created_at=now,
+        updated_at=now,
+    )
+    db.session.commit()
+    flash("تمت إضافة فيديو أعمالنا.", "success")
+    return redirect(url_for("admin_dashboard"))
+
+
+@app.route("/admin/videos/<int:video_id>/edit", methods=["POST"])
+@admin_required
+def edit_youtube_video(video_id: int):
+    video = fetch_one("SELECT id FROM youtube_videos WHERE id = :video_id", video_id=video_id)
+    if not video:
+        flash("الفيديو غير موجود.", "error")
+        return redirect(url_for("admin_dashboard"))
+
+    title = request.form.get("title", "").strip()
+    video_url = request.form.get("video_url", "").strip()
+    display_order = request.form.get("display_order", "0").strip()
+
+    try:
+        display_order_num = int(display_order or "0")
+    except ValueError:
+        flash("ترتيب الفيديو غير صالح.", "error")
+        return redirect(url_for("admin_dashboard"))
+
+    if len(title) < 2:
+        flash("عنوان الفيديو قصير جداً.", "error")
+        return redirect(url_for("admin_dashboard"))
+
+    embed_url = build_youtube_embed_url(video_url)
+    if not embed_url:
+        flash("رابط يوتيوب غير صالح.", "error")
+        return redirect(url_for("admin_dashboard"))
+
+    execute_sql(
+        """
+        UPDATE youtube_videos
+        SET title = :title,
+            url = :url,
+            embed_url = :embed_url,
+            display_order = :display_order,
+            updated_at = :updated_at
+        WHERE id = :video_id
+        """,
+        title=title,
+        url=video_url,
+        embed_url=embed_url,
+        display_order=display_order_num,
+        updated_at=utc_now(),
+        video_id=video_id,
+    )
+    db.session.commit()
+    flash("تم تحديث الفيديو.", "success")
+    return redirect(url_for("admin_dashboard"))
+
+
+@app.route("/admin/videos/<int:video_id>/delete", methods=["POST"])
+@admin_required
+def delete_youtube_video(video_id: int):
+    video = fetch_one("SELECT id FROM youtube_videos WHERE id = :video_id", video_id=video_id)
+    if not video:
+        flash("الفيديو غير موجود.", "error")
+        return redirect(url_for("admin_dashboard"))
+
+    execute_sql("DELETE FROM youtube_videos WHERE id = :video_id", video_id=video_id)
+    db.session.commit()
+    flash("تم حذف الفيديو.", "success")
     return redirect(url_for("admin_dashboard"))
 
 

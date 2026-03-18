@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}الدعم | الرحيم{% endblock %}
+{% block content %}
+<section class="support-hero" data-reveal>
+  <article class="support-hero-copy">
+    <span class="support-kicker">{{ 'لوحة الدعم' if current_user.role == 'admin' else 'مركز الدعم' }}</span>
+    <h1>{{ 'متابعة طلبات المراجعين' if current_user.role == 'admin' else 'الدعم والمتابعة' }}</h1>
+    {% if current_user.role == 'admin' %}
+    <p>جميع الطلبات مرتبة بحيث تظهر الرسائل الجديدة أولاً، ويمكنك الرد على كل حالة مباشرة من الصفحة نفسها.</p>
+    {% else %}
+    <p>أرسل استفسارك أو طلبك هنا، وستظهر لك متابعة الإدارة والردود داخل نفس الصفحة.</p>
+    {% endif %}
+  </article>
+
+  <article class="support-status-card {{ 'pending' if current_user.role != 'admin' and has_pending else 'ready' }}">
+    {% if current_user.role == 'admin' %}
+    <strong>الطلبات غير المجابة تظهر أولاً</strong>
+    <p>ابدأ بالطلبات المعلقة ثم أكمل الحالات التي تمت متابعتها سابقاً.</p>
+    {% elif has_pending %}
+    <strong>لديك طلب قيد المراجعة</strong>
+    <p>انتظر رد الإدارة على طلبك الحالي قبل إرسال طلب جديد.</p>
+    {% else %}
+    <strong>الدعم متاح الآن</strong>
+    <p>صف الحالة أو المشكلة بوضوح وسيتابعك الفريق عبر هذه الصفحة.</p>
+    {% endif %}
+  </article>
+</section>
+
+{% if current_user.role == 'admin' %}
+<section class="support-admin-layout" data-reveal>
+  {% if messages %}
+  <div class="support-ticket-list">
+    {% for msg in messages %}
+    <article class="support-ticket {{ 'pending' if msg.status == 'pending' else 'answered' }}">
+      <header class="support-ticket-head">
+        <div>
+          <strong>{{ msg.full_name }}</strong>
+          <small>@{{ msg.username }}</small>
+        </div>
+        <div class="support-ticket-meta">
+          <span class="status-pill {{ msg.status }}">{{ 'بانتظار الرد' if msg.status == 'pending' else 'تمت المتابعة' }}</span>
+          <small>{{ msg.created_at|dt_ar }}</small>
+        </div>
+      </header>
+
+      <p class="support-thread-body">{{ msg.body }}</p>
+
+      {% if msg.status == 'pending' %}
+      <form class="support-response-form" method="post" action="{{ url_for('respond_message', message_id=msg.id) }}">
+        <label for="response-{{ msg.id }}">رد الإدارة</label>
+        <textarea id="response-{{ msg.id }}" name="response" rows="3" required placeholder="اكتب الرد المناسب للمراجع هنا"></textarea>
+        <button class="btn primary small" type="submit">إرسال الرد</button>
+      </form>
+      {% else %}
+      <div class="support-response-box">
+        <h3>آخر رد تم إرساله</h3>
+        <p>{{ msg.response }}</p>
+        <small>{{ msg.responded_at|dt_ar }}</small>
+      </div>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <article class="panel empty-panel">
+    <div class="support-empty">
+      <h3>لا توجد طلبات حالياً</h3>
+      <p>ستظهر هنا طلبات الدعم الجديدة بمجرد إرسالها من المراجعين.</p>
+    </div>
+  </article>
+  {% endif %}
+</section>
+{% else %}
+<section class="support-layout" data-reveal>
+  <article class="panel support-compose">
+    <div class="panel-head">
+      <h2>أرسل طلب الدعم</h2>
+      <p>اكتب التفاصيل المهمة بوضوح حتى يصلك رد أدق وأسرع من الإدارة.</p>
+    </div>
+
+    <form class="support-form" method="post">
+      <label for="message">كيف يمكننا مساعدتك؟</label>
+      <textarea
+        id="message"
+        name="message"
+        rows="5"
+        required
+        minlength="5"
+        {% if has_pending %}disabled{% endif %}
+        placeholder="مثال: أحتاج متابعة بخصوص ألم أسفل الظهر أو تعديل موعد الجلسة القادمة"
+      ></textarea>
+
+      <div class="support-form-actions">
+        <button class="btn primary" type="submit" {% if has_pending %}disabled{% endif %}>إرسال الطلب</button>
+        {% if has_pending %}
+        <span class="support-inline-note warn">لا يمكنك إرسال طلب جديد قبل الرد على الطلب الحالي.</span>
+        {% else %}
+        <span class="support-inline-note">يمكنك إرسال طلب واحد في كل مرة لضمان متابعة واضحة.</span>
+        {% endif %}
+      </div>
+    </form>
+  </article>
+
+  <article class="panel support-history">
+    <div class="panel-head">
+      <h2>متابعة الطلبات</h2>
+      <p>كل رد من الإدارة سيظهر هنا مع وقت الإرسال لتبقى المتابعة منظمة.</p>
+    </div>
+
+    {% if messages %}
+    <div class="support-thread">
+      {% for msg in messages %}
+      <article class="support-thread-item {{ msg.status }}">
+        <header class="support-thread-meta">
+          <span class="status-pill {{ msg.status }}">{{ 'بانتظار الرد' if msg.status == 'pending' else 'تمت المتابعة' }}</span>
+          <small>{{ msg.created_at|dt_ar }}</small>
+        </header>
+
+        <p class="support-thread-body">{{ msg.body }}</p>
+
+        {% if msg.status == 'answered' %}
+        <div class="support-response-box">
+          <h3>رد الإدارة</h3>
+          <p>{{ msg.response }}</p>
+          <small>{{ msg.responded_at|dt_ar }}</small>
+        </div>
+        {% else %}
+        <p class="badge-warn">بانتظار رد الإدارة على هذا الطلب.</p>
+        {% endif %}
+      </article>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="support-empty">
+      <h3>لا توجد طلبات بعد</h3>
+      <p>أرسل أول طلب دعم لديك، وستجد المتابعة والردود هنا فوراً.</p>
+    </div>
+    {% endif %}
+  </article>
+</section>
+{% endif %}
+{% endblock %}
